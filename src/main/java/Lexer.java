@@ -89,19 +89,58 @@ public class Lexer {
     }
     Token string_lit(char start, int line, int pos) { // handle string literals
         String result = "";
-        // code here
+        while(getNextChar() != start){
+            result += this.chr;
+        }
+        getNextChar();
         return new Token(TokenType.String, result, line, pos);
     }
     Token div_or_comment(int line, int pos) { // handle division or comments
-        // code here
+        if(getNextChar() == '/'){
+            while(getNextChar() != '\n'){
+
+            }
+        }
+        else if(getNextChar() == '*'){
+            boolean commentEnded = false;
+            while (!commentEnded){
+                if(getNextChar() == '*'){
+                    if(getNextChar() == '/'){
+                        break;
+                    }
+                }
+            }
+        }
+        else{
+            return new Token(TokenType.Op_divide,"",line,pos);
+        }
         return getToken();
     }
     Token identifier_or_integer(int line, int pos) { // handle identifiers and integers
         boolean is_number = true;
         String text = "";
-        // code here
-        return new Token(TokenType.Identifier, text, line, pos);
+        char c = this.chr;
+        if(Character.isDigit(this.chr)){
+            while(Character.isDigit(c)){
+                text += c;
+                c = getNextChar();
+            }
+            return new Token(TokenType.Integer,text,line,pos);
+        }
+        if(Character.isLetter(c) || c == '_'){
+            while(!Character.isWhitespace(c) && !checkForErrors(c)){
+                text+= c;
+                c = getNextChar();
+            }
+            if(keywords.containsKey(text)){
+                return new Token(keywords.get(text),text,line,pos);
+            }
+
+        }
+        text += this.chr;
+        return new Token(TokenType.Identifier,text,line,pos);
     }
+
     Token getToken() {
         int line, pos;
         while (Character.isWhitespace(this.chr)) {
@@ -115,7 +154,24 @@ public class Lexer {
         switch (this.chr) {
             case '\u0000': return new Token(TokenType.End_of_input, "", this.line, this.pos);
             // remaining case statements
-
+            case '/' : return div_or_comment(line,pos);
+            case '"' : return string_lit('"',line,pos);
+            case '=':
+                return follow('=',TokenType.Op_assign,TokenType.Op_equal,line,pos);
+            case '*': return new Token(TokenType.Op_multiply,"",line,pos);
+            case '%': return new Token(TokenType.Op_mod,"",line,pos);
+            case '+': return new Token(TokenType.Op_add,"",line,pos);
+            case '-': return new Token(TokenType.Op_subtract,"",line,pos);
+            case '<':
+                return follow('=',TokenType.Op_lessequal, TokenType.Op_less,line,pos);
+            case '>':
+                return follow('=', TokenType.Op_greaterequal,TokenType.Op_greater,line,pos);
+            case '(': return new Token(TokenType.LeftParen,"",line,pos);
+            case ')': return new Token(TokenType.RightParen,"",line,pos);
+            case '{': return new Token(TokenType.LeftBrace,"",line,pos );
+            case '}': return new Token(TokenType.RightBrace,"",line,pos);
+            case ';': return new Token(TokenType.Semicolon,"",line,pos);
+            case ',': return new Token(TokenType.Comma,"",line,pos);
             default: return identifier_or_integer(line, pos);
         }
     }
@@ -133,6 +189,13 @@ public class Lexer {
             this.pos = 0;
         }
         return this.chr;
+    }
+
+    boolean checkForErrors(char c){
+        if(c == '\u0000' || c == '\n'){
+            return true;
+        }
+        return false;
     }
 
     String printTokens() {
