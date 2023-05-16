@@ -133,7 +133,7 @@
       <workItem from="1683141564295" duration="383000" />
       <workItem from="1684258559623" duration="601000" />
       <workItem from="1684259168413" duration="138000" />
-      <workItem from="1684259356623" duration="7135000" />
+      <workItem from="1684259356623" duration="10061000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit, incomplete solution">
       <created>1678238319702</created>
@@ -176,8 +176,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Lexer.java</url>
-          <line>153</line>
-          <option name="timeStamp" value="7" />
+          <line>183</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

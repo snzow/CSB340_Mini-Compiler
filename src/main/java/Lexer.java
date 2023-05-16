@@ -23,6 +23,7 @@ public class Lexer {
         Token(TokenType token, String value, int line, int pos) {
             this.tokentype = token; this.value = value; this.line = line; this.pos = pos;
         }
+
         @Override
         public String toString() {
             String result = String.format("%5d  %5d %-15s", this.line, this.pos, this.tokentype);
@@ -128,7 +129,7 @@ public class Lexer {
             return new Token(TokenType.Integer,text,line,pos);
         }
         if(Character.isLetter(c) || c == '_'){
-            while(!Character.isWhitespace(c) && !checkForErrors(c)){
+            while(Character.isDigit(c) || Character.isLetter(c)){
                 text+= c;
                 c = getNextChar();
             }
@@ -137,8 +138,13 @@ public class Lexer {
             }
 
         }
-        text += this.chr;
         return new Token(TokenType.Identifier,text,line,pos);
+    }
+
+    Token nextCharAfterToken(TokenType type, String value, int line, int pos){
+        Token t = new Token(type,value,line,pos);
+        getNextChar();
+        return t;
     }
 
     Token getToken() {
@@ -158,20 +164,22 @@ public class Lexer {
             case '"' : return string_lit('"',line,pos);
             case '=':
                 return follow('=',TokenType.Op_assign,TokenType.Op_equal,line,pos);
-            case '*': return new Token(TokenType.Op_multiply,"",line,pos);
-            case '%': return new Token(TokenType.Op_mod,"",line,pos);
-            case '+': return new Token(TokenType.Op_add,"",line,pos);
-            case '-': return new Token(TokenType.Op_subtract,"",line,pos);
+            case '*': return nextCharAfterToken(TokenType.Op_multiply,"",line,pos);
+            case '%': return nextCharAfterToken(TokenType.Op_mod,"",line,pos);
+            case '+': return nextCharAfterToken(TokenType.Op_add,"",line,pos);
+            case '-': return nextCharAfterToken(TokenType.Op_subtract,"",line,pos);
             case '<':
                 return follow('=',TokenType.Op_lessequal, TokenType.Op_less,line,pos);
             case '>':
                 return follow('=', TokenType.Op_greaterequal,TokenType.Op_greater,line,pos);
-            case '(': return new Token(TokenType.LeftParen,"",line,pos);
-            case ')': return new Token(TokenType.RightParen,"",line,pos);
-            case '{': return new Token(TokenType.LeftBrace,"",line,pos );
-            case '}': return new Token(TokenType.RightBrace,"",line,pos);
-            case ';': return new Token(TokenType.Semicolon,"",line,pos);
-            case ',': return new Token(TokenType.Comma,"",line,pos);
+
+            //
+            case '(': return nextCharAfterToken(TokenType.LeftParen,"",line,pos);
+            case ')': return nextCharAfterToken(TokenType.RightParen,"",line,pos);
+            case '{': return nextCharAfterToken(TokenType.LeftBrace,"",line,pos);
+            case '}': return nextCharAfterToken(TokenType.RightBrace,"",line,pos);
+            case ';': return nextCharAfterToken(TokenType.Semicolon,"",line,pos);
+            case ',': return nextCharAfterToken(TokenType.Comma,"",line,pos);
             default: return identifier_or_integer(line, pos);
         }
     }
