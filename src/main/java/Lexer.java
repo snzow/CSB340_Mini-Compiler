@@ -85,7 +85,8 @@ public class Lexer {
     Token char_lit(int line, int pos) { // handle character literals
         char c = getNextChar(); // skip opening quote
         int n = (int)c;
-        // code here
+        getNextChar();
+        getNextChar();
         return new Token(TokenType.Integer, "" + n, line, pos);
     }
     Token string_lit(char start, int line, int pos) { // handle string literals
@@ -157,11 +158,13 @@ public class Lexer {
 
         // switch statement on character for all forms of tokens with return to follow.... one example left for you
 
+
         switch (this.chr) {
             case '\u0000': return new Token(TokenType.End_of_input, "", this.line, this.pos);
             // remaining case statements
             case '/' : return div_or_comment(line,pos);
             case '"' : return string_lit('"',line,pos);
+            case '\'': return char_lit(line,pos);
             case '=':
                 return follow('=',TokenType.Op_assign,TokenType.Op_equal,line,pos);
             case '*': return nextCharAfterToken(TokenType.Op_multiply,"",line,pos);

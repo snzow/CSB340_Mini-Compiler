@@ -18,11 +18,16 @@
     3     31 String          "\n"
     3     35 RightParen     
     3     36 Semicolon      
-    4      4 Identifier      count
-    4     10 Op_equal       
-    4     12 Identifier      count
-    4     18 Op_add         
-    4     20 Integer             1
-    4     21 Semicolon      
-    5      1 RightBrace     
-    6      1 End_of_input   
+    4      4 Identifier      char
+    4      9 Identifier      x
+    4     11 Op_equal       
+    4     13 Integer           120
+    4     16 Semicolon      
+    5      4 Identifier      count
+    5     10 Op_equal       
+    5     12 Identifier      count
+    5     18 Op_add         
+    5     20 Integer             1
+    5     21 Semicolon      
+    6      1 RightBrace     
+    7      1 End_of_input   
