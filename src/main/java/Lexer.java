@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * @author Aodhan Bower
+ */
 public class Lexer {
     private int line;
     private int pos;

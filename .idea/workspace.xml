@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a7ac25b6-265d-43ed-8230-0c6749f7127e" name="Changes" comment="New commit with added getNextToken() code">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/count.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/count.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hello.lex" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hello.lex" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +131,7 @@
       <workItem from="1683141564295" duration="383000" />
       <workItem from="1684258559623" duration="601000" />
       <workItem from="1684259168413" duration="138000" />
-      <workItem from="1684259356623" duration="11704000" />
+      <workItem from="1684259356623" duration="12410000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit, incomplete solution">
       <created>1678238319702</created>
