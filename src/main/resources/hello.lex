@@ -15,7 +15,7 @@
     3     19 Comma          
     3     21 Identifier      count
     3     26 Comma          
-    3     28 String          ""
+    3     28 String          "\n"
     3     32 RightParen     
     3     33 Semicolon      
     4      1 Identifier      count

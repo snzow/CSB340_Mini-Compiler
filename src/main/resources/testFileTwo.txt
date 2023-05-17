@@ -1,0 +1,13 @@
+
+boolean dog = true;
+boolean cat = false;
+
+if(dog && cat){
+    print(5);
+}
+else if(dog || cat){
+    print(6);
+}
+else{
+    print(7);
+}

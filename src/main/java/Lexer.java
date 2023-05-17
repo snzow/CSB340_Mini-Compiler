@@ -97,12 +97,7 @@ public class Lexer {
     Token string_lit(char start, int line, int pos) { // handle string literals
         String result = "";
         while(getNextChar() != start){
-            if(this.chr == '\n' || this.chr =='\\'){
-                getNextChar();
-            }
-            else{
-                result += this.chr;
-            }
+            result += this.chr;
         }
         getNextChar();
         return new Token(TokenType.String, result, line, pos);
@@ -230,9 +225,10 @@ public class Lexer {
         return sb.toString();
     }
 
-    static void outputToFile(String result) {
+    static void outputToFile(String result, String fileName) {
         try {
-            FileWriter myWriter = new FileWriter("src/main/resources/hello.lex");
+            String fileAddress = "src/main/resources/" + fileName + ".lex";
+            FileWriter myWriter = new FileWriter(fileAddress);
             myWriter.write(result);
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
@@ -241,27 +237,34 @@ public class Lexer {
         }
     }
 
-    public static void main(String[] args) {
-        if (1==1) {
-            try {
-
-                File f = new File("src/main/resources/loop.py");
-                Scanner s = new Scanner(f);
-                String source = " ";
-                String result = " ";
-                while (s.hasNext()) {
-                    source += s.nextLine() + "\n";
-                }
-                Lexer l = new Lexer(source);
-                result = l.printTokens();
-
-                outputToFile(result);
-
-            } catch(FileNotFoundException e) {
-                error(-1, -1, "Exception: " + e.getMessage());
+    static void runLexer(File f, String outputFileName){
+        try {
+            Scanner s = new Scanner(f);
+            String source = " ";
+            String result = " ";
+            while (s.hasNext()) {
+                source += s.nextLine() + "\n";
             }
-        } else {
-            error(-1, -1, "No args");
+            Lexer l = new Lexer(source);
+            result = l.printTokens();
+
+            outputToFile(result,outputFileName);
+
+        } catch(FileNotFoundException e) {
+            error(-1, -1, "Exception: " + e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        File f = new File("src/main/resources/prime.c");
+        Lexer.runLexer(f,"primeOutput");
+        f = new File("src/main/resources/fizzbuzz.c");
+        Lexer.runLexer(f,"fizzbuzzOutput");
+        f = new File("src/main/resources/99bottles.c");
+        Lexer.runLexer(f,"99bottlesOutput");
+        f = new File("src/main/resources/testFileOne.txt");
+        Lexer.runLexer(f,"testoneOutput");
+        f = new File("src/main/resources/testFileTwo.txt");
+        Lexer.runLexer(f,"testtwoOutput");
     }
 }
