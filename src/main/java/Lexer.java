@@ -97,18 +97,24 @@ public class Lexer {
     Token string_lit(char start, int line, int pos) { // handle string literals
         String result = "";
         while(getNextChar() != start){
-            result += this.chr;
+            if(this.chr == '\n' || this.chr =='\\'){
+                getNextChar();
+            }
+            else{
+                result += this.chr;
+            }
         }
         getNextChar();
         return new Token(TokenType.String, result, line, pos);
     }
     Token div_or_comment(int line, int pos) { // handle division or comments
-        if(getNextChar() == '/'){
+        char nextVal = getNextChar();
+        if(nextVal == '/'){
             while(getNextChar() != '\n'){
 
             }
         }
-        else if(getNextChar() == '*'){
+        else if(nextVal == '*'){
             boolean commentEnded = false;
             while (!commentEnded){
                 if(getNextChar() == '*'){
@@ -176,12 +182,15 @@ public class Lexer {
             case '%': return nextCharAfterToken(TokenType.Op_mod,"",line,pos);
             case '+': return nextCharAfterToken(TokenType.Op_add,"",line,pos);
             case '-': return nextCharAfterToken(TokenType.Op_subtract,"",line,pos);
+            case '&': return follow('&',TokenType.Op_and,TokenType.End_of_input,line,pos);
+            case '|': return follow('|',TokenType.Op_or,TokenType.End_of_input,line,pos);
+            case '!':
+                return follow('=',TokenType.Op_notequal,TokenType.Op_not,line,pos);
             case '<':
                 return follow('=',TokenType.Op_lessequal, TokenType.Op_less,line,pos);
             case '>':
                 return follow('=', TokenType.Op_greaterequal,TokenType.Op_greater,line,pos);
 
-            //
             case '(': return nextCharAfterToken(TokenType.LeftParen,"",line,pos);
             case ')': return nextCharAfterToken(TokenType.RightParen,"",line,pos);
             case '{': return nextCharAfterToken(TokenType.LeftBrace,"",line,pos);
@@ -207,12 +216,6 @@ public class Lexer {
         return this.chr;
     }
 
-    boolean checkForErrors(char c){
-        if(c == '\u0000' || c == '\n'){
-            return true;
-        }
-        return false;
-    }
 
     String printTokens() {
         Token t;
@@ -242,7 +245,7 @@ public class Lexer {
         if (1==1) {
             try {
 
-                File f = new File("src/main/resources/count.c");
+                File f = new File("src/main/resources/loop.py");
                 Scanner s = new Scanner(f);
                 String source = " ";
                 String result = " ";
