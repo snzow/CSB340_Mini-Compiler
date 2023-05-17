@@ -143,11 +143,42 @@ class Parser {
         return this.token;
     }
     Node expr(int p) {
-        // create nodes for token types such as LeftParen, Op_add, Op_subtract, etc.
-        // be very careful here and be aware of the precendence rules for the AST tree
-        Node result = null, node;
+        Node currNode = null;
+        if (this.token.tokentype == TokenType.LeftParen) {
+            currNode = paren_expr();
+        } else if (this.token.tokentype == TokenType.Op_add || this.token.tokentype == TokenType.Op_subtract) {
+            TokenType operation = this.token.tokentype == TokenType.Op_subtract ? TokenType.Op_negate : TokenType.Op_add;
+            getNextToken();
+            Node node = expr(TokenType.Op_negate.getPrecedence());
+            currNode = operation == TokenType.Op_negate ? Node.make_node(NodeType.nd_Negate, node) : node;
+        } else if (this.token.tokentype == TokenType.Op_not) {
+            getNextToken();
+            currNode = expr(TokenType.Op_not.getPrecedence());
+        } else if (this.token.tokentype == TokenType.Identifier) {
+            getNextToken();
+            currNode = expr(TokenType.Identifier.getPrecedence());
+        } else if (this.token.tokentype == TokenType.Integer) {
+            Token prevToken = this.token;
+            getNextToken();
+            if (isTokenOperator(this.token)) {
+                Node.make_node(this.token.tokentype.node_type, expr(this.token.tokentype.getPrecedence()));
+            }
+
+        }
+        while (this.token.tokentype.is_binary && this.token.tokentype.precedence >= p) {
+            Token prevToken = this.token;
+            getNextToken();
+            Node.make_node(this.token.tokentype.node_type, expr(this.token.tokentype.getPrecedence()),
+                    Node.make_node(prevToken.tokentype.node_type, null));
+        }
+        Node result = currNode;
 
         return result;
+    }
+
+    public boolean isTokenOperator(Token token) {
+        return token.tokentype == TokenType.Op_add || token.tokentype == TokenType.Op_subtract ||
+                token.tokentype == TokenType.Op_not || token.tokentype == TokenType.Identifier;
     }
     Node paren_expr() {
         expect("paren_expr", TokenType.LeftParen);
